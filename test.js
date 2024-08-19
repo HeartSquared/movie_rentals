@@ -155,5 +155,4 @@ describe("Rental", () => {
       rental2.calculatePrice().should.equal(3)
     })
   })
-
 })
