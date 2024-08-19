@@ -7,14 +7,14 @@ PriceCode.REGULAR = 'REGULAR'
 PriceCode.CHILDRENS = 'CHILDRENS'
 PriceCode.NEW_RELEASE = 'NEW RELEASE'
 
-class Movie {
+export class Movie {
   constructor(title, priceCode) {
     this.title = title
     this.priceCode = priceCode
   }
 }
 
-class Rental {
+export class Rental {
   constructor(movie, daysRented) {
     this.movie = movie
     this.daysRented = daysRented
