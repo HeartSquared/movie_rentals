@@ -16,6 +16,26 @@ class Rental {
     this.movie = movie
     this.daysRented = daysRented
   }
+
+  calculatePrice() {
+    let thisAmount = 0
+    if (this.movie.priceCode.name === 'REGULAR') {
+      thisAmount += 2
+      if (this.daysRented > 2) {
+        thisAmount += ((this.daysRented - 2) * 1.5);
+      }
+    }
+    else if (this.movie.priceCode.name === 'NEW RELEASE') {
+      thisAmount += this.daysRented * 3
+    }
+    else if (this.movie.priceCode.name === 'CHILDRENS') {
+      thisAmount += 1.5;
+      if (this.daysRented > 3) {
+        thisAmount = (this.daysRented - 3) * 1.5;
+      }
+    }
+    return thisAmount
+  }
 }
 
 class Statement {
@@ -30,32 +50,18 @@ class Statement {
   print() {
     let result = "Rental record for " + this.name + "\n"
     for (let i=0; i<this.rentals.length; i++) {
-      let each = this.rentals[i]
-      let thisAmount = 0
-      if (each.movie.priceCode.name === 'REGULAR') {
-        thisAmount += 2
-        if (each.daysRented > 2) {
-          thisAmount += ((each.daysRented - 2) * 1.5);
-        }
-      }
-      else if (each.movie.priceCode.name === 'NEW RELEASE') {
-        thisAmount += each.daysRented * 3
-      }
-      else if (each.movie.priceCode.name === 'CHILDRENS') {
-        thisAmount += 1.5;
-        if (each.daysRented > 3) {
-          thisAmount = (each.daysRented - 3) * 1.5;
-        }
-      }
+      const rental = this.rentals[i]
+      const rentalPrice = rental.calculatePrice()
+
       // add frequent renter points
       this.frequentRenterPoints++;
       // add bonus for a two-day new-release rental
-      if ((each.movie.priceCode.name === 'NEW RELEASE') && (each.daysRented > 1)) {
+      if ((rental.movie.priceCode.name === 'NEW RELEASE') && (rental.daysRented > 1)) {
         this.frequentRenterPoints ++;
       }
       // show figures for this rental
-      result += "\t" + each.movie.title + "\t" + thisAmount + "\n";
-      this.totalAmount += thisAmount;
+      result += "\t" + rental.movie.title + "\t" + rentalPrice + "\n";
+      this.totalAmount += rentalPrice;
     }
     // add footer lines
     result += "Amount owed is " + this.totalAmount + "\n";
