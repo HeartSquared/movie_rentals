@@ -15,10 +15,10 @@ john_smith.addRental(cinderella, 5)
 john_smith.addRental(star_wars, 5)
 john_smith.addRental(gladiator, 5)
 
-describe("store", function() {
+describe("Store", function() {
 
   describe("movies", function() {
-  
+
     it("should be 3", function(){
       store.movies.length.should.equal(3)
     })
@@ -34,9 +34,9 @@ describe("store", function() {
     })
 
   })
-  
+
   describe("customers", function() {
-  
+
     it("should be 1", function(){
       store.customers.length.should.equal(1)
     })
@@ -49,7 +49,7 @@ describe("store", function() {
   let customer = store.customers[0]
 
   describe("rentals", function() {
-  
+
     it("should be 3", function(){
       customer.rentals.length.should.equal(3)
     })
@@ -65,13 +65,15 @@ describe("store", function() {
     })
 
   })
+})
 
-  describe("statement", function() {
-  
-    it("should be 3", function(){
+describe("Statement", () => {
+  describe("print()", () => {
+    it("contains the expected data", () => {
+      let customer = store.customers[0]
       // At this point, the structure of the program begins getting in the
       // way of testing. Rentals are imbedded in the Customer object, but
-      // there is no property to access them. They can only be accessed 
+      // there is no property to access them. They can only be accessed
       // internally, by the Statement() method, which imbeds them in the
       // text string passed as it's return value. So, to get these amounts,
       // we will have to parse that value
@@ -96,9 +98,9 @@ describe("store", function() {
       //    [9] = price #3
       //    [10] = "Amount owed is x"
       //    [11] = "You earned x frequent renter points."
-      // We will test the title and price elements, and the total 
-      // and frequent renter points items. If these tests pass, then 
-      // we know that AddRentals() is adding rentals to a Customer 
+      // We will test the title and price elements, and the total
+      // and frequent renter points items. If these tests pass, then
+      // we know that AddRentals() is adding rentals to a Customer
       // object properly, and that the Statement() method is
       // generating a statement in the expected format.
       statementTokens[2].should.equal('Cinderella')
@@ -108,8 +110,5 @@ describe("store", function() {
       statementTokens[8].should.equal('Gladiator')
       statementTokens[9].should.equal('15')
     })
-
   })
-
-}) 
-
+})
