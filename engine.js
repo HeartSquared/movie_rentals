@@ -51,7 +51,7 @@ export class Rental {
   }
 }
 
-class Statement {
+export class Statement {
   constructor(customerName, rentals) {
     this.totalAmount = 0
     this.frequentRenterPoints = 0
@@ -60,24 +60,42 @@ class Statement {
     this.rentals = rentals
   }
 
-  print() {
-    let result = "Rental record for " + this.name + "\n"
-
-    this.rentals.forEach(rental => {
+  calculateRental() {
+    return this.rentals.map(rental => {
       const rentalPrice = rental.calculatePrice()
+      this.totalAmount += rentalPrice;
 
       // add frequent renter points
-      this.frequentRenterPoints = rental.calculateFrequentRenterPoints()
+      this.frequentRenterPoints += rental.calculateFrequentRenterPoints()
 
-      // show figures for this rental
-      result += "\t" + rental.movie.title + "\t" + rentalPrice + "\n";
-      this.totalAmount += rentalPrice;
+      return {
+        movieTitle: rental.movie.title,
+        rentalPrice,
+        totalAmount: this.totalAmount,
+        frequentRenterPoints: this.frequentRenterPoints
+      }
     })
+  }
 
-    // add footer lines
-    result += "Amount owed is " + this.totalAmount + "\n";
-    result += "You earned " + this.frequentRenterPoints + " frequent renter points.";
-    return result;
+  getPrintHeader() {
+    return "Rental record for " + this.name + "\n"
+  }
+
+  getPrintBody() {
+    let body = ''
+    this.calculateRental().forEach(({ movieTitle, rentalPrice }) => {
+      body += "\t" + movieTitle + "\t" + rentalPrice + "\n";
+    })
+    return body
+  }
+
+  getPrintFooter() {
+    return "Amount owed is " + this.totalAmount + "\n" +
+      "You earned " + this.frequentRenterPoints + " frequent renter points.";
+  }
+
+  print() {
+    return this.getPrintHeader() + this.getPrintBody() + this.getPrintFooter()
   }
 }
 
