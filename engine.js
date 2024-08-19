@@ -1,8 +1,11 @@
-class PriceCode {
+export class PriceCode {
   constructor(name) {
     this.name = name
   }
 }
+PriceCode.REGULAR = 'REGULAR'
+PriceCode.CHILDRENS = 'CHILDRENS'
+PriceCode.NEW_RELEASE = 'NEW RELEASE'
 
 class Movie {
   constructor(title, priceCode) {
@@ -19,16 +22,16 @@ class Rental {
 
   calculatePrice() {
     let thisAmount = 0
-    if (this.movie.priceCode.name === 'REGULAR') {
+    if (this.movie.priceCode.name === PriceCode.REGULAR) {
       thisAmount += 2
       if (this.daysRented > 2) {
         thisAmount += ((this.daysRented - 2) * 1.5);
       }
     }
-    else if (this.movie.priceCode.name === 'NEW RELEASE') {
+    else if (this.movie.priceCode.name === PriceCode.NEW_RELEASE) {
       thisAmount += this.daysRented * 3
     }
-    else if (this.movie.priceCode.name === 'CHILDRENS') {
+    else if (this.movie.priceCode.name === PriceCode.CHILDRENS) {
       thisAmount += 1.5;
       if (this.daysRented > 3) {
         thisAmount = (this.daysRented - 3) * 1.5;
@@ -56,7 +59,7 @@ class Statement {
       // add frequent renter points
       this.frequentRenterPoints++;
       // add bonus for a two-day new-release rental
-      if ((rental.movie.priceCode.name === 'NEW RELEASE') && (rental.daysRented > 1)) {
+      if ((rental.movie.priceCode.name === PriceCode.NEW_RELEASE) && (rental.daysRented > 1)) {
         this.frequentRenterPoints ++;
       }
       // show figures for this rental
@@ -102,6 +105,6 @@ export class Store {
   }
 }
 
-Store.PRICE_CODE_REGULAR = new PriceCode('REGULAR')
-Store.PRICE_CODE_CHILDRENS = new PriceCode('CHILDRENS')
-Store.PRICE_CODE_NEW_RELEASE = new PriceCode('NEW RELEASE')
+Store.PRICE_CODE_REGULAR = new PriceCode(PriceCode.REGULAR)
+Store.PRICE_CODE_CHILDRENS = new PriceCode(PriceCode.CHILDRENS)
+Store.PRICE_CODE_NEW_RELEASE = new PriceCode(PriceCode.NEW_RELEASE)
