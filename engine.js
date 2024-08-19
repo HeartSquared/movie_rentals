@@ -109,7 +109,7 @@ class Customer {
     this.rentals.push(rental)
     return rental;
   }
-  statement() {
+  printStatement() {
     return (new Statement(this.name, this.rentals)).print()
   }
 }

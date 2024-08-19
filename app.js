@@ -12,7 +12,7 @@ john_smith.addRental(cinderella, 5)
 john_smith.addRental(star_wars, 5)
 john_smith.addRental(gladiator, 5)
 
-console.log(john_smith.statement())
+console.log(john_smith.printStatement())
 
 // You should see:
 
@@ -22,4 +22,3 @@ console.log(john_smith.statement())
 //   Gladiator 15
 // Amount owed is 24.5
 // You earned 4 frequent renter points.
-

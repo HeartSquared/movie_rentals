@@ -118,7 +118,7 @@ describe("Statement", () => {
 Amount owed is 24.5
 You earned 4 frequent renter points.`
 
-      customer.statement().should.equal(expected)
+      customer.printStatement().should.equal(expected)
     })
   })
 })
