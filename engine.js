@@ -41,6 +41,14 @@ export class Rental {
 
     throw new Error("invalid price code")
   }
+
+  calculateFrequentRenterPoints() {
+    // add bonus for a two-day new-release rental
+    if ((this.movie.priceCode.name === PriceCode.NEW_RELEASE) && (this.daysRented > 1)) {
+      return 2;
+    }
+    return 1;
+  }
 }
 
 class Statement {
@@ -54,20 +62,18 @@ class Statement {
 
   print() {
     let result = "Rental record for " + this.name + "\n"
-    for (let i=0; i<this.rentals.length; i++) {
-      const rental = this.rentals[i]
+
+    this.rentals.forEach(rental => {
       const rentalPrice = rental.calculatePrice()
 
       // add frequent renter points
-      this.frequentRenterPoints++;
-      // add bonus for a two-day new-release rental
-      if ((rental.movie.priceCode.name === PriceCode.NEW_RELEASE) && (rental.daysRented > 1)) {
-        this.frequentRenterPoints ++;
-      }
+      this.frequentRenterPoints = rental.calculateFrequentRenterPoints()
+
       // show figures for this rental
       result += "\t" + rental.movie.title + "\t" + rentalPrice + "\n";
       this.totalAmount += rentalPrice;
-    }
+    })
+
     // add footer lines
     result += "Amount owed is " + this.totalAmount + "\n";
     result += "You earned " + this.frequentRenterPoints + " frequent renter points.";

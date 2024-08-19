@@ -114,45 +114,61 @@ describe("Statement", () => {
 })
 
 describe("Rental", () => {
-  describe("price for a Regular movie", () => {
-    it("correctly calculates for less than or equal to 2 days", () => {
-      const movie = new Movie("Hamilton", new PriceCode(PriceCode.REGULAR))
-      const rental1 = new Rental(movie, 1)
-      rental1.calculatePrice().should.equal(2)
-      const rental2 = new Rental(movie, 2)
-      rental2.calculatePrice().should.equal(2)
+  describe("calculatePrice()", () => {
+    describe("price for a Regular movie", () => {
+      it("correctly calculates for less than or equal to 2 days", () => {
+        const movie = new Movie("Hamilton", new PriceCode(PriceCode.REGULAR))
+        const rental1 = new Rental(movie, 1)
+        rental1.calculatePrice().should.equal(2)
+        const rental2 = new Rental(movie, 2)
+        rental2.calculatePrice().should.equal(2)
+      })
+
+      it("correctly calculates for above 2 days", () => {
+        const movie = new Movie("Hamilton", new PriceCode(PriceCode.REGULAR))
+        const rental = new Rental(movie, 3)
+        rental.calculatePrice().should.equal(3.5)
+      })
     })
 
-    it("correctly calculates for above 2 days", () => {
-      const movie = new Movie("Hamilton", new PriceCode(PriceCode.REGULAR))
-      const rental = new Rental(movie, 3)
-      rental.calculatePrice().should.equal(3.5)
+    describe("price for a New Release movie", () => {
+      it("correctly calculates the price", () => {
+        const movie = new Movie("Hamilton", new PriceCode(PriceCode.NEW_RELEASE))
+        const rental = new Rental(movie, 3)
+        rental.calculatePrice().should.equal(9)
+      })
+    })
+
+    describe("price for a Childrens movie", () => {
+      it("correctly calculates for less than or equal to 3 days", () => {
+        const movie = new Movie("Hamilton", new PriceCode(PriceCode.CHILDRENS))
+        const rental1 = new Rental(movie, 1)
+        rental1.calculatePrice().should.equal(1.5)
+        const rental2 = new Rental(movie, 3)
+        rental2.calculatePrice().should.equal(1.5)
+      })
+
+      it("correctly calculates for above 3 days", () => {
+        const movie = new Movie("Hamilton", new PriceCode(PriceCode.CHILDRENS))
+        const rental1 = new Rental(movie, 4)
+        rental1.calculatePrice().should.equal(1.5)
+        const rental2 = new Rental(movie, 5)
+        rental2.calculatePrice().should.equal(3)
+      })
     })
   })
 
-  describe("price for a New Release movie", () => {
-    it("correctly calculates the price", () => {
+  describe("calculateFrequentRenterPoints()", () => {
+    it("returns 2 for two-day New Release rentals", () => {
       const movie = new Movie("Hamilton", new PriceCode(PriceCode.NEW_RELEASE))
       const rental = new Rental(movie, 3)
-      rental.calculatePrice().should.equal(9)
-    })
-  })
-
-  describe("price for a Childrens movie", () => {
-    it("correctly calculates for less than or equal to 3 days", () => {
-      const movie = new Movie("Hamilton", new PriceCode(PriceCode.CHILDRENS))
-      const rental1 = new Rental(movie, 1)
-      rental1.calculatePrice().should.equal(1.5)
-      const rental2 = new Rental(movie, 3)
-      rental2.calculatePrice().should.equal(1.5)
+      rental.calculateFrequentRenterPoints().should.equal(2)
     })
 
-    it("correctly calculates for above 3 days", () => {
-      const movie = new Movie("Hamilton", new PriceCode(PriceCode.CHILDRENS))
-      const rental1 = new Rental(movie, 4)
-      rental1.calculatePrice().should.equal(1.5)
-      const rental2 = new Rental(movie, 5)
-      rental2.calculatePrice().should.equal(3)
+    it("returns 1 for all others", () => {
+      const movie = new Movie("Hamilton", new PriceCode(PriceCode.REGULAR))
+      const rental = new Rental(movie, 3)
+      rental.calculateFrequentRenterPoints().should.equal(1)
     })
   })
 })
