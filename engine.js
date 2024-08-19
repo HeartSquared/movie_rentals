@@ -21,23 +21,25 @@ export class Rental {
   }
 
   calculatePrice() {
-    let thisAmount = 0
     if (this.movie.priceCode.name === PriceCode.REGULAR) {
-      thisAmount += 2
       if (this.daysRented > 2) {
-        thisAmount += ((this.daysRented - 2) * 1.5);
+        return 2 + ((this.daysRented - 2) * 1.5);
       }
+      return 2
     }
-    else if (this.movie.priceCode.name === PriceCode.NEW_RELEASE) {
-      thisAmount += this.daysRented * 3
+
+    if (this.movie.priceCode.name === PriceCode.NEW_RELEASE) {
+      return this.daysRented * 3
     }
-    else if (this.movie.priceCode.name === PriceCode.CHILDRENS) {
-      thisAmount += 1.5;
+
+    if (this.movie.priceCode.name === PriceCode.CHILDRENS) {
       if (this.daysRented > 3) {
-        thisAmount = (this.daysRented - 3) * 1.5;
+        return (this.daysRented - 3) * 1.5;
       }
+      return 1.5;
     }
-    return thisAmount
+
+    throw new Error("invalid price code")
   }
 }
 
