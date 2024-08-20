@@ -1,4 +1,4 @@
-import { Store, Movie, Rental, PriceCode, Statement } from './engine.js'
+import { Store, Movie, Rental, PriceCode, Statement, Customer } from './engine.js'
 
 let chai = require('chai')
 chai.should()
@@ -74,35 +74,20 @@ describe("Statement", () => {
       const star_wars  = new Movie('Star Wars', Store.PRICE_CODE_REGULAR)
       const gladiator  = new Movie('Gladiator', Store.PRICE_CODE_NEW_RELEASE)
 
-      const rentals = [
-        new Rental(cinderella, 5),
-        new Rental(star_wars, 5),
-        new Rental(gladiator, 5),
-      ]
+      const john_smith = new Customer("John Smith")
+      john_smith.addRental(cinderella, 5)
+      john_smith.addRental(star_wars, 5)
+      john_smith.addRental(gladiator, 5)
 
-      const statement = new Statement("John Smith", rentals)
-      const rentalCost = statement.calculateRental()
+      const statement = new Statement(john_smith)
 
-      rentalCost.should.deep.equal([
-        {
-          movieTitle: 'Cinderella',
-          rentalPrice: 3,
-          totalAmount: 3,
-          frequentRenterPoints: 1,
-        },
-        {
-          movieTitle: 'Star Wars',
-          rentalPrice: 6.5,
-          totalAmount: 9.5,
-          frequentRenterPoints: 2,
-        },
-        {
-          movieTitle: 'Gladiator',
-          rentalPrice: 15,
-          totalAmount: 24.5,
-          frequentRenterPoints: 4,
-        },
+      statement.rentalSummary.should.deep.equal([
+        { movieTitle: 'Cinderella', rentalPrice: 3 },
+        { movieTitle: 'Star Wars', rentalPrice: 6.5 },
+        { movieTitle: 'Gladiator', rentalPrice: 15 },
       ])
+      statement.totalAmount.should.equal(24.5)
+      statement.frequentRenterPoints.should.equal(4)
     })
   })
 

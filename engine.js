@@ -52,15 +52,18 @@ export class Rental {
 }
 
 export class Statement {
-  constructor(customerName, rentals) {
+  constructor(customer) {
     this.totalAmount = 0
     this.frequentRenterPoints = 0
 
-    this.name = customerName
-    this.rentals = rentals
+    this.name = customer.name
+    this.rentals = customer.rentals
+
+    this.rentalSummary = this._calculateRental()
   }
 
-  calculateRental() {
+  // Ideally a private function to prevent calling multiple times
+  _calculateRental() {
     return this.rentals.map(rental => {
       const rentalPrice = rental.calculatePrice()
       this.totalAmount += rentalPrice;
@@ -71,8 +74,6 @@ export class Statement {
       return {
         movieTitle: rental.movie.title,
         rentalPrice,
-        totalAmount: this.totalAmount,
-        frequentRenterPoints: this.frequentRenterPoints
       }
     })
   }
@@ -83,7 +84,7 @@ export class Statement {
 
   getPrintBody() {
     let body = ''
-    this.calculateRental().forEach(({ movieTitle, rentalPrice }) => {
+    this.rentalSummary.forEach(({ movieTitle, rentalPrice }) => {
       body += "\t" + movieTitle + "\t" + rentalPrice + "\n";
     })
     return body
@@ -99,7 +100,7 @@ export class Statement {
   }
 }
 
-class Customer {
+export class Customer {
   constructor(name) {
     this.name = name
     this.rentals = []
@@ -110,7 +111,7 @@ class Customer {
     return rental;
   }
   printStatement() {
-    return (new Statement(this.name, this.rentals)).print()
+    return (new Statement(this)).print()
   }
 }
 
